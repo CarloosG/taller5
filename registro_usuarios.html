@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Formulario de Registro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body>
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Registro de Usuario</h1>
+                <form id="registroForm" onsubmit="return validarFormulario()" class="box">
+                    <div class="field">
+                        <label for="nombre" class="label">Nombre:</label>
+                        <div class="control">
+                            <input type="text" id="nombre" name="nombre" class="input" required>
+                        </div>
+                        <p id="nombreError" class="help is-danger"></p>
+                    </div>
+                    <div class="field">
+                        <label for="apellido" class="label">Apellido:</label>
+                        <div class="control">
+                            <input type="text" id="apellido" name="apellido" class="input" required>
+                        </div>
+                        <p id="apellidoError" class="help is-danger"></p>
+                    </div>
+                    <div class="field">
+                        <label for="Fecha_nacimiento" class="label">Fecha de nacimiento:</label>
+                        <div class="control">
+                            <input type="date" id="Fecha_nacimiento" name="Fecha_nacimiento" class="input">
+                            <button onclick="calcularEdad()">Calcular Edad</button>
+                        </div>
+                    </div>
+                    
+                    <p id="resultadoEdad"></p>
+                    
+                    <div class="field">
+                        <label for="email" class="label">Email:</label>
+                        <div class="control">
+                            <input type="email" id="email" name="email" class="input" required>
+                        </div>
+                        <p id="emailError" class="help is-danger"></p>
+                    </div>
+                    <div class="field">
+                        <label for="password" class="label">Password:</label>
+                        <div class="control">
+                            <input type="password" id="password" name="password" class="input" required>
+                        </div>
+                        <p id="passwordError" class="help is-danger"></p>
+                    </div>
+                    <div class="field">
+                        <label for="confirmPassword" class="label">Confirm password:</label>
+                        <div class="control">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="input" required>
+                        </div>
+                        <p id="confirmPasswordError" class="help is-danger"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">¿Has sufrido de enfermedades contagiosas?</label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="enfermedadesSelect" onchange="mostrarCasillaTexto()">
+                                    <option value="no">No</option>
+                                    <option value="si">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="enfermedadesCasilla" style="display: none;" class="field">
+                        <label for="enfermedadesTexto" class="label">Especifica cuáles:</label>
+                        <div class="control">
+                            <input type="text" id="enfermedadesTexto" name="enfermedadesTexto" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input type="submit" value="Registrar" class="button is-primary">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script>
+
+function calcularEdad() {
+        
+        var fechaNacimiento = new Date(document.getElementById("Fecha_nacimiento").value);
+
+        
+        var fechaActual = new Date();
+
+        var diferencia = fechaActual - fechaNacimiento;
+
+ 
+        var edad = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 365.25));
+
+        document.getElementById("resultadoEdad").textContent = "Edad: " + edad + " años";
+    }
+
+        function mostrarCasillaTexto() {
+            var select = document.getElementById("enfermedadesSelect");
+            var casillaTexto = document.getElementById("enfermedadesCasilla");
+            
+            if (select.value === "si") {
+                casillaTexto.style.display = "block";
+            } else {
+                casillaTexto.style.display = "none";
+            }
+        }
+
+        function validarFormulario() {
+            var nombre = document.getElementById("nombre").value;
+            var nombreError = document.getElementById("nombreError");
+            if (nombre.length > 25) {
+                nombreError.textContent = "El nombre no debe tener mas de 25 caracteres.";
+                return false;
+            } else {
+                nombreError.textContent = "";
+            }
+            var apellido = document.getElementById("apellido").value;
+            var apellidoError = document.getElementById("apellidoError");
+            if (apellido.length > 25) {
+                apellidoError.textContent = "El apellido no debe tener mas de 25 caracteres.";
+                return false;
+            }  else {
+                apellidoError.textContent = "";
+            }
+            var email = document.getElementById("email").value;
+            var emailError = document.getElementById("emailError");
+            if (email.length > 120) {
+                emailError.textContent = "El email no debe tener más de 120 caracteres.";
+                return false;
+            }else {
+               emailError.textContent = "";
+            }
+
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var passwordError = document.getElementById("passwordError");
+            if ( !/^[A-Za-z0-9#%/&]+$/.test(password) || password !== confirmPassword) {
+                passwordError.textContent = "Las contraseñas no coinciden";
+                return false;
+            }else {
+               passwordError.textContent = "";
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

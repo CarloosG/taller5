@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla con Filtrado</title>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.3.1010/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.3.1010/styles/kendo.default.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.3.1010/js/kendo.all.min.js"></script>
+</head>
+<body>
+    <input type="text" id="filterInput" placeholder="Filtrar por cualquier campo">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>Company</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+        </tbody>
+    </table>
+
+    <script>
+        var userTableBody = document.getElementById("userTableBody");
+        var filterInput = document.getElementById("filterInput");
+
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                function populateTable() {
+                    userTableBody.innerHTML = ''; // Limpia la tabla antes de repoblarla
+                    data.forEach(function (user) {
+                        if (!filterInput.value || JSON.stringify(user).toLowerCase().includes(filterInput.value.toLowerCase())) {
+                            var row = document.createElement("tr");
+                            var idCell = document.createElement("td");
+                            idCell.textContent = user.id;
+                            var usernameCell = document.createElement("td");
+                            usernameCell.textContent = user.username;
+                            var emailCell = document.createElement("td");
+                            emailCell.textContent = user.email;
+                            var addressCell = document.createElement("td");
+                            var addressText = `${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}`;
+                            addressCell.textContent = addressText;
+                            var phoneCell = document.createElement("td");
+                            phoneCell.textContent = user.phone;
+                            var websiteCell = document.createElement("td");
+                            websiteCell.textContent = user.website;
+                            var companyCell = document.createElement("td");
+                            var companyText = `${user.company.name}, ${user.company.catchPhrase}, ${user.company.bs}`;
+                            companyCell.textContent = companyText;
+
+                            row.appendChild(idCell);
+                            row.appendChild(usernameCell);
+                            row.appendChild(emailCell);
+                            row.appendChild(addressCell);
+                            row.appendChild(phoneCell);
+                            row.appendChild(websiteCell);
+                            row.appendChild(companyCell);
+
+                            userTableBody.appendChild(row);
+                        }
+                    });
+                }
+                filterInput.addEventListener('input', populateTable);
+                populateTable();
+            })
+            .catch(function (error) {
+                console.error("Error al cargar los datos de los usuarios: " + error);
+            });
+    </script>
+
+    <style>
+
+body {
+      background-color: #00d1b2; 
+      color: white;
+}
+
+       table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        th, td {
+          border: 1px solid #ccc;
+          padding: 8px;
+         text-align: left;
+    }
+
+        .row {
+            margin-bottom: 20px;
+            border-bottom: thin solid black;
+        }
+
+        .image {
+            text-align: center;
+        }
+
+        .tag {
+            font-style: italic;
+        }
+
+        .tag:hover {
+            background-color: lightblue;
+        }
+
+        .strong {
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>
